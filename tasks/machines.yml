@@ -1,0 +1,176 @@
+# Standards: 0.1
+---
+- name: Check userdata exists
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.userdata
+  register: libvirt_machines_userdata
+  stat:
+    path: '/var/lib/libvirt/userdata/{{ item.name }}.iso'
+  tags:
+    - libvirt
+    - machines
+
+- name: Include userdata tasks
+  loop: '{{ libvirt_machines_userdata.results }}'
+  loop_control:
+    label: '{{ item.item.name }}'
+  when: item.item.userdata and (not item.stat.exists or item.item.overwrite | default(False))
+  include_tasks: userdata.yml
+  tags:
+    - libvirt
+    - machines
+
+- name: Create lvm volume
+  loop: '{{ libvirt_machines | subelements("disks") }}'
+  loop_control:
+    label: '{{ item.0.name }}: {{ item.1.name }}'
+  when: item.1.type == 'lvm'
+  register: libvirt_machines_volume
+  lvol:
+    vg: '{{ item.1.group }}'
+    lv: '{{ item.1.name }}'
+    size: '{{ item.1.size }}'
+  tags:
+    - libvirt
+    - machines
+
+- name: Convert volume source
+  loop: '{{ libvirt_machines_volume.results }}'
+  loop_control:
+    label: '{{ item.item.0.name }}: {{ item.item.1.name }}'
+  when: item.changed
+  register: libvirt_machines_rawfile
+  command: |
+    qemu-img convert -O raw {{ item.item.1.source }} {{ item.item.1.source }}.raw
+  args:
+    creates: '{{ item.item.1.source }}.raw'
+  tags:
+    - libvirt
+    - machines
+
+- name: Source to volume
+  loop: '{{ libvirt_machines_rawfile.results }}'
+  loop_control:
+    label: '{{ item.item.item.0.name }}: {{ item.item.item.1.name }}'
+  when: item.changed
+  command: |
+    dd if={{ item.item.item.1.source }}.raw of=/dev/{{ item.item.item.1.group }}/{{ item.item.item.1.name }} bs=4M
+  tags:
+    - libvirt
+    - machines
+
+- name: Delete converted source
+  loop: '{{ libvirt_machines_rawfile.results }}'
+  loop_control:
+    label: '{{ item.item.item.0.name }}: {{ item.item.item.1.name }}'
+  file:
+    path: '{{ item.item.item.1.source }}.raw'
+    state: absent
+  tags:
+    - libvirt
+    - machines
+
+- name: Check qcow2 image
+  loop: '{{ libvirt_machines | subelements("disks") }}'
+  loop_control:
+    label: '{{ item.0.name }}: {{ item.1.name }}'
+  when: item.1.type == 'qcow2'
+  register: libvirt_machines_image
+  check_mode: True
+  stat:
+    path: '/var/lib/libvirt/images/{{ item.1.name }}.qcow2'
+  tags:
+    - libvirt
+    - machines
+
+- name: Source to image
+  loop: '{{ libvirt_machines_image.results }}'
+  loop_control:
+    label: '{{ item.item.0.name }}: {{ item.item.1.name }}'
+  when: item.stat is defined and not item.stat.exists
+  register: libvirt_machines_create
+  copy:
+    src: '{{ item.item.1.source }}'
+    dest: '/var/lib/libvirt/images/{{ item.item.1.name }}.qcow2'
+    remote_src: True
+    owner: libvirt-qemu
+    group: kvm
+    mode: 0660
+  tags:
+    - libvirt
+    - machines
+
+- name: Resize qcow2 image
+  loop: '{{ libvirt_machines_create.results }}'
+  loop_control:
+    label: '{{ item.item.item.0.name }}: {{ item.item.item.1.name }}'
+  when: item.changed
+  command: |
+    qemu-img resize /var/lib/libvirt/images/{{ item.item.item.1.name }}.qcow2 {{ item.item.item.1.size | upper }}
+  tags:
+    - libvirt
+    - machines
+
+- name: Define machine spec
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.state | default("running") != "destroyed"
+  virt:
+    command: define
+    xml: '{{ lookup("template", "machines/spec.j2") }}'
+  tags:
+    - libvirt
+    - machines
+
+- name: Destroy machine
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.state | default("running") == 'destroyed'
+  virt:
+    name: '{{ item.name }}'
+    command: destroy
+  tags:
+    - libvirt
+    - machines
+
+- name: Undefine machine
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.state | default("running") == 'destroyed'
+  virt:
+    name: '{{ item.name }}'
+    command: undefine
+  tags:
+    - libvirt
+    - machines
+
+- name: Autostart machine
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.state | default("running") == 'running'
+  virt:
+    name: '{{ item.name }}'
+    autostart: '{{ item.autostart | default(True) }}'
+  tags:
+    - libvirt
+    - machines
+
+- name: Change machine state
+  loop: '{{ libvirt_machines }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: item.state | default("running") == 'running'
+  virt:
+    name: '{{ item.name }}'
+    state: '{{ item.state | default("running") }}'
+  tags:
+    - libvirt
+    - machines
+
+...

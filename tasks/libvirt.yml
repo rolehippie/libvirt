@@ -1,0 +1,92 @@
+# Standards: 0.1
+---
+- name: Install required packages
+  loop:
+    - qemu-kvm
+    - libvirt-bin
+    - python3-libvirt
+    - python3-lxml
+    - genisoimage
+  package:
+    name: '{{ item }}'
+    state: present
+  tags:
+    - libvirt
+
+- name: Write libvirtd default
+  notify:
+    - Restart libvirtd
+  template:
+    src: libvirt/libvirtd.j2
+    dest: /etc/default/libvirtd
+  tags:
+    - libvirt
+
+- name: Write guests default
+  notify:
+    - Restart guests
+  template:
+    src: libvirt/guests.j2
+    dest: /etc/default/libvirt-guests
+  tags:
+    - libvirt
+
+- name: Write virtlockd default
+  notify:
+    - Restart virtlockd
+  template:
+    src: libvirt/virtlockd.j2
+    dest: /etc/default/virtlockd
+  tags:
+    - libvirt
+
+- name: Write virtlogd default
+  notify:
+    - Restart virtlogd
+  template:
+    src: libvirt/virtlogd.j2
+    dest: /etc/default/virtlogd
+  tags:
+    - libvirt
+
+- name: Start libvirtd service
+  systemd:
+    name: libvirt-bin
+    state: started
+    daemon_reload: yes
+    masked: no
+    enabled: yes
+  tags:
+    - libvirt
+
+- name: Start guests service
+  systemd:
+    name: libvirt-guests
+    state: started
+    daemon_reload: yes
+    masked: no
+    enabled: yes
+  tags:
+    - libvirt
+
+- name: Start virtlockd service
+  systemd:
+    name: virtlockd
+    state: started
+    daemon_reload: yes
+    masked: no
+    enabled: yes
+  tags:
+    - libvirt
+
+- name: Start virtlogd service
+  systemd:
+    name: virtlogd
+    state: started
+    daemon_reload: yes
+    masked: no
+    enabled: yes
+  tags:
+    - libvirt
+
+...

@@ -1,0 +1,18 @@
+# Standards: 0.1
+---
+- name: Download defined images
+  loop: '{{ libvirt_images }}'
+  loop_control:
+    label: '{{ item.name }}'
+  get_url:
+    url: '{{ item.url }}'
+    dest: '/var/lib/libvirt/images/{{ item.name }}'
+    checksum: '{{ item.checksum | default(omit) }}'
+    owner: libvirt-qemu
+    group: kvm
+    mode: 0660
+  tags:
+    - libvirt
+    - images
+
+...

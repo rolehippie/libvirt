@@ -1,0 +1,6 @@
+version: 2
+ethernets:
+{% for interface in item.item.interfaces %}
+  {{ interface.device }}:
+    dhcp4: {{ interface.dhcp | lower }}
+{% endfor %}

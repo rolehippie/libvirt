@@ -1,0 +1,12 @@
+<network>
+  <name>{{ item.name }}</name>
+  {% if item.uuid | default(False) %}
+    <uuid>{{ item.uuid }}</uuid>
+  {% endif %}
+  {% if item.mac | default(False) %}
+    <mac address="{{ item.mac }}"/>
+  {% endif %}
+
+  <bridge name="{{ item.bridge }}" />
+  <forward mode="{{ item.mode | default("bridge") }}" />
+</network>
