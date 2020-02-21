@@ -8,5 +8,5 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_libvirt_is_installed(host):
-    libvirt = host.package("libvirt-bin")
-    assert libvirt.is_installed
+    pkg = host.package("libvirt-bin")
+    assert pkg.is_installed
