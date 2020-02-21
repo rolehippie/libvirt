@@ -6,6 +6,7 @@
     label: '{{ item.name }}'
   when: item.state | default("active") != "destroyed"
   virt_net:
+    name: '{{ item.name }}'
     command: define
     xml: '{{ lookup("template", "networks/spec.j2") }}'
   tags:
