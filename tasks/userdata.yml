@@ -3,7 +3,7 @@
 - name: Delete userdata iso
   when: item.stat.exists
   file:
-    path: '/var/lib/libvirt/userdata/{{ item.item.name }}.iso'
+    path: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
     state: absent
   tags:
     - libvirt
@@ -11,7 +11,7 @@
 
 - name: Create userdata dir
   file:
-    path: '/var/lib/libvirt/userdata/{{ item.item.name }}'
+    path: "/var/lib/libvirt/userdata/{{ item.item.name }}"
     state: directory
   tags:
     - libvirt
@@ -20,7 +20,7 @@
 - name: Create user-data file
   template:
     src: machines/userdata.j2
-    dest: '/var/lib/libvirt/userdata/{{ item.item.name }}/user-data'
+    dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/user-data"
   tags:
     - libvirt
     - machines
@@ -28,7 +28,7 @@
 - name: Create meta-data file
   template:
     src: machines/metadata.j2
-    dest: '/var/lib/libvirt/userdata/{{ item.item.name }}/meta-data'
+    dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/meta-data"
   tags:
     - libvirt
     - machines
@@ -36,7 +36,7 @@
 - name: Create network-config file
   template:
     src: machines/network.j2
-    dest: '/var/lib/libvirt/userdata/{{ item.item.name }}/network-config'
+    dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/network-config"
   tags:
     - libvirt
     - machines
@@ -45,14 +45,14 @@
   command: |
     genisoimage -J -r -output /var/lib/libvirt/userdata/{{ item.item.name }}.iso -volid cidata /var/lib/libvirt/userdata/{{ item.item.name }}/user-data /var/lib/libvirt/userdata/{{ item.item.name }}/meta-data /var/lib/libvirt/userdata/{{ item.item.name }}/network-config
   args:
-    creates: '/var/lib/libvirt/userdata/{{ item.item.name }}.iso'
+    creates: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
   tags:
     - libvirt
     - machines
 
 - name: Fix image perms
   file:
-    path: '/var/lib/libvirt/userdata/{{ item.item.name }}.iso'
+    path: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
     owner: libvirt-qemu
     group: kvm
     mode: 0660
@@ -62,7 +62,7 @@
 
 - name: Delete userdata dir
   file:
-    path: '/var/lib/libvirt/userdata/{{ item.item.name }}'
+    path: "/var/lib/libvirt/userdata/{{ item.item.name }}"
     state: absent
   tags:
     - libvirt

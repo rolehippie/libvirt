@@ -4,24 +4,24 @@
   systemd:
     name: libvirt-bin
     state: restarted
-    daemon_reload: yes
+    daemon_reload: True
 
 - name: Restart guests
   systemd:
     name: libvirt-guests
     state: restarted
-    daemon_reload: yes
+    daemon_reload: True
 
 - name: Restart virtlockd
   systemd:
     name: virtlockd
     state: restarted
-    daemon_reload: yes
+    daemon_reload: True
 
 - name: Restart virtlogd
   systemd:
     name: virtlogd
     state: restarted
-    daemon_reload: yes
+    daemon_reload: True
 
 ...
