@@ -1,5 +1,4 @@
 import os
-
 import testinfra.utils.ansible_runner
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
@@ -8,5 +7,5 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_is_installed(host):
-    pkg = host.package("libvirt-bin")
+    pkg = host.package("qemu-kvm")
     assert pkg.is_installed

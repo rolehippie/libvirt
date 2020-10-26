@@ -1,9 +1,11 @@
-# Standards: 0.1
+# Standards: 1.2
 ---
 - name: Install required packages
   loop:
     - qemu-kvm
-    - libvirt-bin
+    - libvirt-daemon-system
+    - libvirt-clients
+    - bridge-utils
     - python3-libvirt
     - python3-lxml
     - genisoimage
@@ -51,7 +53,7 @@
 
 - name: Start libvirtd service
   systemd:
-    name: libvirt-bin
+    name: libvirtd
     state: started
     daemon_reload: True
     masked: False
@@ -69,9 +71,9 @@
   tags:
     - libvirt
 
-- name: Start virtlockd service
+- name: Start virtlogd service
   systemd:
-    name: virtlockd
+    name: virtlogd
     state: started
     daemon_reload: True
     masked: False
@@ -79,9 +81,9 @@
   tags:
     - libvirt
 
-- name: Start virtlogd service
+- name: Start virtlockd service
   systemd:
-    name: virtlogd
+    name: virtlockd
     state: started
     daemon_reload: True
     masked: False
