@@ -1,8 +1,14 @@
 # libvirt
 
-[![Build Status](https://cloud.drone.io/api/badges/rolehippie/libvirt/status.svg)](https://cloud.drone.io/rolehippie/libvirt)
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/libvirt) [![Build Status](https://img.shields.io/drone/build/rolehippie/libvirt/master?logo=drone)](https://cloud.drone.io/rolehippie/libvirt) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/libvirt)](https://github.com/rolehippie/libvirt/blob/master/LICENSE) 
 
-Ansible role to configure libvirt
+Ansible role to install and configure libvirt. 
+
+## Sponsor 
+
+[![Proact Deutschland GmbH](https://proact.eu/wp-content/uploads/2020/03/proact-logo.png)](https://proact.eu) 
+
+Building and improving this Ansible role have been sponsored by my employer **Proact Deutschland GmbH**.
 
 ## Table of content
 
@@ -142,7 +148,7 @@ libvirt_virtlogd_args:
 
 ## Dependencies
 
-- None
+* None
 
 ## License
 

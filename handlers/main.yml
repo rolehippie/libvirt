@@ -1,14 +1,14 @@
-# Standards: 0.1
+# Standards: 1.2
 ---
 - name: Restart libvirtd
   systemd:
-    name: libvirt-bin
+    name: libvirtd
     state: restarted
     daemon_reload: True
 
-- name: Restart guests
+- name: Restart virtlogd
   systemd:
-    name: libvirt-guests
+    name: virtlogd
     state: restarted
     daemon_reload: True
 
@@ -18,9 +18,9 @@
     state: restarted
     daemon_reload: True
 
-- name: Restart virtlogd
+- name: Restart guests
   systemd:
-    name: virtlogd
+    name: libvirt-guests
     state: restarted
     daemon_reload: True
 

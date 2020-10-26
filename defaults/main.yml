@@ -1,4 +1,4 @@
-# Standards: 0.1
+# Standards: 1.2
 ---
 # @var libvirt_daemon_opts:description: Arguments for the libvirtd
 libvirt_daemon_opts:

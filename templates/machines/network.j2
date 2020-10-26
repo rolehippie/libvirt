@@ -3,4 +3,14 @@ ethernets:
 {% for interface in item.item.interfaces %}
   {{ interface.device }}:
     dhcp4: {{ interface.dhcp | lower }}
+{% if interface.addresses | default(False) %}
+    addresses: {{ interface.addresses | to_yaml }}
+{% endif %}
+{% if interface.nameservers | default(False) %}
+    nameservers:
+      addresses: {{ interface.nameservers | to_yaml }}
+{% endif %}
+{% if interface.gateway | default(False) %}
+    gateway4: {{ interface.gateway }}
+{% endif %}
 {% endfor %}
