@@ -9,6 +9,8 @@
     - python3-libvirt
     - python3-lxml
     - genisoimage
+    - cloud-image-utils
+    - libguestfs-tools
   package:
     name: "{{ item }}"
     state: present
@@ -24,12 +26,12 @@
   tags:
     - libvirt
 
-- name: Write guests default
+- name: Write virtlogd default
   notify:
-    - Restart guests
+    - Restart virtlogd
   template:
-    src: libvirt/guests.j2
-    dest: /etc/default/libvirt-guests
+    src: libvirt/virtlogd.j2
+    dest: /etc/default/virtlogd
   tags:
     - libvirt
 
@@ -42,28 +44,18 @@
   tags:
     - libvirt
 
-- name: Write virtlogd default
+- name: Write guests default
   notify:
-    - Restart virtlogd
+    - Restart guests
   template:
-    src: libvirt/virtlogd.j2
-    dest: /etc/default/virtlogd
+    src: libvirt/guests.j2
+    dest: /etc/default/libvirt-guests
   tags:
     - libvirt
 
 - name: Start libvirtd service
   systemd:
     name: libvirtd
-    state: started
-    daemon_reload: True
-    masked: False
-    enabled: True
-  tags:
-    - libvirt
-
-- name: Start guests service
-  systemd:
-    name: libvirt-guests
     state: started
     daemon_reload: True
     masked: False
@@ -84,6 +76,16 @@
 - name: Start virtlockd service
   systemd:
     name: virtlockd
+    state: started
+    daemon_reload: True
+    masked: False
+    enabled: True
+  tags:
+    - libvirt
+
+- name: Start guests service
+  systemd:
+    name: libvirt-guests
     state: started
     daemon_reload: True
     masked: False

@@ -4,7 +4,7 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.userdata
+  when: item.userdata and item.state | default('running') != 'destroyed'
   register: libvirt_machines_userdata
   stat:
     path: "/var/lib/libvirt/userdata/{{ item.name }}.iso"
@@ -13,10 +13,10 @@
     - machines
 
 - name: Include userdata tasks
-  loop: "{{ libvirt_machines_userdata.results }}"
+  loop: "{{ libvirt_machines_userdata.results | default([]) }}"
   loop_control:
     label: "{{ item.item.name }}"
-  when: item.item.userdata and (not item.stat.exists or item.item.overwrite | default(False))
+  when: not item.skipped | default(False) and item.item.userdata and (not item.stat.exists or item.item.overwrite | default(False))
   include_tasks: userdata.yml
   tags:
     - libvirt
@@ -26,47 +26,49 @@
   loop: "{{ libvirt_machines | subelements('disks') }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.1.type == "lvm"
+  when: item.1.type == "lvm" and item.0.state | default('running') != 'destroyed'
   register: libvirt_machines_volume
   lvol:
     vg: "{{ item.1.group }}"
     lv: "{{ item.1.name }}"
     size: "{{ item.1.size }}"
+    resizefs: True
   tags:
     - libvirt
     - machines
 
 - name: Convert volume source
-  loop: "{{ libvirt_machines_volume.results }}"
+  loop: "{{ libvirt_machines_volume.results | default([]) }}"
   loop_control:
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
-  when: item.changed
+  when: item.changed and item.item.1.source is defined
   register: libvirt_machines_rawfile
   command: |
-    qemu-img convert -O raw {{ item.item.1.source }} {{ item.item.1.source }}.raw
+    qemu-img convert -O raw {{ item.item.1.source }} {{ item.item.1.source }}-{{ item.item.1.name }}.raw
   args:
-    creates: "{{ item.item.1.source }}.raw"
+    creates: "{{ item.item.1.source }}-{{ item.item.1.name }}.raw"
   tags:
     - libvirt
     - machines
 
 - name: Source to volume
-  loop: "{{ libvirt_machines_rawfile.results }}"
+  loop: "{{ libvirt_machines_rawfile.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
-  when: item.changed
+  when: item.changed and item.item.item.1.source is defined
   command: |
-    dd if={{ item.item.item.1.source }}.raw of=/dev/{{ item.item.item.1.group }}/{{ item.item.item.1.name }} bs=4M
+    dd if={{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw of=/dev/{{ item.item.item.1.group }}/{{ item.item.item.1.name }} bs=4M
   tags:
     - libvirt
     - machines
 
 - name: Delete converted source
-  loop: "{{ libvirt_machines_rawfile.results }}"
+  loop: "{{ libvirt_machines_rawfile.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
+  when: item.item.item.1.source is defined
   file:
-    path: "{{ item.item.item.1.source }}.raw"
+    path: "{{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw"
     state: absent
   tags:
     - libvirt
@@ -76,7 +78,7 @@
   loop: "{{ libvirt_machines | subelements('disks') }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.1.type == "qcow2"
+  when: item.1.type == "qcow2" and item.state | default('running') != 'destroyed'
   register: libvirt_machines_image
   check_mode: True
   stat:
@@ -89,7 +91,7 @@
   loop: "{{ libvirt_machines_image.results }}"
   loop_control:
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
-  when: item.stat is defined and not item.stat.exists
+  when: item.item.1.source is defined and item.stat is defined and not item.stat.exists
   register: libvirt_machines_create
   copy:
     src: "{{ item.item.1.source }}"
@@ -103,7 +105,7 @@
     - machines
 
 - name: Resize qcow2 image
-  loop: "{{ libvirt_machines_create.results }}"
+  loop: "{{ libvirt_machines_create.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
   when: item.changed
@@ -113,12 +115,21 @@
     - libvirt
     - machines
 
+- name: List running machines
+  register: libvirt_running_machines
+  community.libvirt.virt:
+    command: list_vms
+    state: running
+  tags:
+    - libvirt
+    - machines
+
 - name: Define machine spec
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("running") != "destroyed"
-  virt:
+  when: item.state | default('running') != 'destroyed' and item.name not in libvirt_running_machines
+  community.libvirt.virt:
     command: define
     xml: "{{ lookup('template', 'machines/spec.j2') }}"
   tags:
@@ -129,8 +140,8 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("running") == "destroyed"
-  virt:
+  when: item.state | default('running') == 'destroyed' and item.name in libvirt_running_machines
+  community.libvirt.virt:
     name: "{{ item.name }}"
     command: destroy
   tags:
@@ -141,8 +152,8 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("running") == "destroyed"
-  virt:
+  when: item.state | default('running') == 'destroyed'
+  community.libvirt.virt:
     name: "{{ item.name }}"
     command: undefine
   tags:
@@ -153,8 +164,8 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("running") == "running"
-  virt:
+  when: item.state | default('running') == 'running'
+  community.libvirt.virt:
     name: "{{ item.name }}"
     autostart: "{{ item.autostart | default(True) }}"
   tags:
@@ -165,10 +176,25 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default("running") == "running"
-  virt:
+  when: item.state | default('running') == 'running'
+  community.libvirt.virt:
     name: "{{ item.name }}"
     state: "{{ item.state | default('running') }}"
+  tags:
+    - libvirt
+    - machines
+
+- name: Delete lvm volume
+  loop: "{{ libvirt_machines | subelements('disks') }}"
+  loop_control:
+    label: "{{ item.0.name }}: {{ item.1.name }}"
+  when: item.1.type == "lvm" and item.0.state | default('running') == 'destroyed'
+  register: libvirt_machines_volume
+  lvol:
+    vg: "{{ item.1.group }}"
+    lv: "{{ item.1.name }}"
+    force: True
+    state: absent
   tags:
     - libvirt
     - machines

@@ -4,13 +4,26 @@
   loop: "{{ libvirt_images }}"
   loop_control:
     label: "{{ item.name }}"
+  when: item.state | default('present') == 'present'
   get_url:
     url: "{{ item.url }}"
     dest: "/var/lib/libvirt/images/{{ item.name }}"
     checksum: "{{ item.checksum | default(omit) }}"
     owner: libvirt-qemu
     group: kvm
-    mode: 0660
+    mode: u=rw,g=rw,o=
+  tags:
+    - libvirt
+    - images
+
+- name: Remove defined images
+  loop: "{{ libvirt_images }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default('present') == 'absent'
+  file:
+    path: "/var/lib/libvirt/images/{{ item.name }}"
+    state: absent
   tags:
     - libvirt
     - images

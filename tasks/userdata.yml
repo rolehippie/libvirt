@@ -43,7 +43,7 @@
 
 - name: Generate userdata image
   command: |
-    genisoimage -J -r -output /var/lib/libvirt/userdata/{{ item.item.name }}.iso -volid cidata /var/lib/libvirt/userdata/{{ item.item.name }}/user-data /var/lib/libvirt/userdata/{{ item.item.name }}/meta-data /var/lib/libvirt/userdata/{{ item.item.name }}/network-config
+    cloud-localds --network-config /var/lib/libvirt/userdata/{{ item.item.name }}/network-config /var/lib/libvirt/userdata/{{ item.item.name }}.iso /var/lib/libvirt/userdata/{{ item.item.name }}/user-data /var/lib/libvirt/userdata/{{ item.item.name }}/meta-data
   args:
     creates: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
   tags:
@@ -55,7 +55,7 @@
     path: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
     owner: libvirt-qemu
     group: kvm
-    mode: 0660
+    mode: u=rw,g=rw,o=
   tags:
     - libvirt
     - machines
