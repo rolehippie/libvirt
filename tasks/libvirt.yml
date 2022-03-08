@@ -23,6 +23,9 @@
   template:
     src: libvirt/libvirtd.j2
     dest: /etc/default/libvirtd
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
 
@@ -32,6 +35,9 @@
   template:
     src: libvirt/virtlogd.j2
     dest: /etc/default/virtlogd
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
 
@@ -41,6 +47,9 @@
   template:
     src: libvirt/virtlockd.j2
     dest: /etc/default/virtlockd
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
 
@@ -50,6 +59,9 @@
   template:
     src: libvirt/guests.j2
     dest: /etc/default/libvirt-guests
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
 

@@ -13,6 +13,9 @@
   file:
     path: "/var/lib/libvirt/userdata/{{ item.item.name }}"
     state: directory
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
   tags:
     - libvirt
     - machines
@@ -21,6 +24,9 @@
   template:
     src: machines/userdata.j2
     dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/user-data"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
     - machines
@@ -29,6 +35,9 @@
   template:
     src: machines/metadata.j2
     dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/meta-data"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
     - machines
@@ -37,6 +46,9 @@
   template:
     src: machines/network.j2
     dest: "/var/lib/libvirt/userdata/{{ item.item.name }}/network-config"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
   tags:
     - libvirt
     - machines
