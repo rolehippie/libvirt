@@ -1,27 +1,28 @@
 # libvirt
 
-[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/libvirt) [![Testing Build](https://github.com/rolehippie/libvirt/workflows/testing/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Atesting) [![Readme Build](https://github.com/rolehippie/libvirt/workflows/readme/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Areadme) [![Galaxy Build](https://github.com/rolehippie/libvirt/workflows/galaxy/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Agalaxy) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/libvirt)](https://github.com/rolehippie/libvirt/blob/master/LICENSE) 
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/libvirt) [![Testing Build](https://github.com/rolehippie/libvirt/workflows/testing/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Atesting) [![Readme Build](https://github.com/rolehippie/libvirt/workflows/readme/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Areadme) [![Galaxy Build](https://github.com/rolehippie/libvirt/workflows/galaxy/badge.svg)](https://github.com/rolehippie/libvirt/actions?query=workflow%3Agalaxy) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/libvirt)](https://github.com/rolehippie/libvirt/blob/master/LICENSE)
 
-Ansible role to install and configure libvirt. 
+Ansible role to install and configure libvirt.
 
-## Sponsor 
+## Sponsor
 
-[![Proact Deutschland GmbH](https://proact.eu/wp-content/uploads/2020/03/proact-logo.png)](https://proact.eu) 
+[![Proact Deutschland GmbH](https://proact.eu/wp-content/uploads/2020/03/proact-logo.png)](https://proact.eu)
 
 Building and improving this Ansible role have been sponsored by my employer **Proact Deutschland GmbH**.
 
 ## Table of content
 
-* [Default Variables](#default-variables)
-  * [libvirt_daemon_opts](#libvirt_daemon_opts)
-  * [libvirt_images](#libvirt_images)
-  * [libvirt_machines](#libvirt_machines)
-  * [libvirt_networks](#libvirt_networks)
-  * [libvirt_virtlockd_args](#libvirt_virtlockd_args)
-  * [libvirt_virtlogd_args](#libvirt_virtlogd_args)
-* [Dependencies](#dependencies)
-* [License](#license)
-* [Author](#author)
+- [Default Variables](#default-variables)
+  - [libvirt_daemon_opts](#libvirt_daemon_opts)
+  - [libvirt_images](#libvirt_images)
+  - [libvirt_machines](#libvirt_machines)
+  - [libvirt_networks](#libvirt_networks)
+  - [libvirt_virtlockd_args](#libvirt_virtlockd_args)
+  - [libvirt_virtlogd_args](#libvirt_virtlogd_args)
+- [Discovered Tags](#discovered-tags)
+- [Dependencies](#dependencies)
+- [License](#license)
+- [Author](#author)
 
 ---
 
@@ -146,9 +147,20 @@ Arguments for the virtlogd
 libvirt_virtlogd_args:
 ```
 
+## Discovered Tags
+
+**_images_**
+
+**_libvirt_**
+
+**_machines_**
+
+**_networks_**
+
+
 ## Dependencies
 
-* None
+- None
 
 ## License
 
