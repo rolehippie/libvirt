@@ -10,7 +10,7 @@
   <vcpu>{{ item.cpus | default(1) }}</vcpu>
 
   <os>
-    <type arch="x86_64" machine="pc-1.3">hvm</type>
+    <type arch="{{ item.arch | default("x86_64") }}">hvm</type>
     {% for boot in item.boot | default(["hd"]) %}
       <boot dev="{{ boot }}"/>
     {% endfor %}
