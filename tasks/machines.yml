@@ -131,7 +131,7 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') != 'destroyed' and item.name not in libvirt_running_machines
+  when: item.state | default('running') != 'destroyed' and item.name not in libvirt_running_machines.list_vms
   community.libvirt.virt:
     command: define
     xml: "{{ lookup('template', 'machines/spec.j2') }}"
@@ -143,7 +143,7 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') == 'destroyed' and item.name in libvirt_running_machines
+  when: item.state | default('running') == 'destroyed' and item.name in libvirt_running_machines.list_vms
   community.libvirt.virt:
     name: "{{ item.name }}"
     command: destroy
