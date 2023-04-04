@@ -1,6 +1,11 @@
 # libvirt
 
-[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/libvirt) [![General Workflow](https://github.com/rolehippie/libvirt/actions/workflows/general.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/general.yml) [![Readme Workflow](https://github.com/rolehippie/libvirt/actions/workflows/readme.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/readme.yml) [![Galaxy Workflow](https://github.com/rolehippie/libvirt/actions/workflows/galaxy.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/galaxy.yml) [![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/libvirt)](https://github.com/rolehippie/libvirt/blob/master/LICENSE) [![Ansible Role](https://img.shields.io/ansible/role/51458)](https://galaxy.ansible.com/rolehippie/libvirt)
+[![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&amp;logoColor=white)](https://github.com/rolehippie/libvirt)
+[![General Workflow](https://github.com/rolehippie/libvirt/actions/workflows/general.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/general.yml)
+[![Readme Workflow](https://github.com/rolehippie/libvirt/actions/workflows/readme.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/readme.yml)
+[![Galaxy Workflow](https://github.com/rolehippie/libvirt/actions/workflows/galaxy.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/galaxy.yml)
+[![License: Apache-2.0](https://img.shields.io/github/license/rolehippie/libvirt)](https://github.com/rolehippie/libvirt/blob/master/LICENSE)
+[![Ansible Role](https://img.shields.io/ansible/role/51458)](https://galaxy.ansible.com/rolehippie/libvirt)
 
 Ansible role to install and configure libvirt.
 
@@ -10,6 +15,7 @@ Building and improving this Ansible role have been sponsored by my current and p
 
 ## Table of content
 
+- [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [libvirt_daemon_opts](#libvirt_daemon_opts)
   - [libvirt_images](#libvirt_images)
@@ -23,6 +29,11 @@ Building and improving this Ansible role have been sponsored by my current and p
 - [Author](#author)
 
 ---
+
+## Requirements
+
+- Minimum Ansible version: `2.10`
+
 
 ## Default Variables
 
