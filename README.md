@@ -17,6 +17,7 @@ Building and improving this Ansible role have been sponsored by my current and p
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [libvirt_archives](#libvirt_archives)
   - [libvirt_daemon_opts](#libvirt_daemon_opts)
   - [libvirt_images](#libvirt_images)
   - [libvirt_machines](#libvirt_machines)
@@ -36,6 +37,25 @@ Building and improving this Ansible role have been sponsored by my current and p
 
 
 ## Default Variables
+
+### libvirt_archives
+
+List of images archives to download and extract
+
+#### Default value
+
+```YAML
+libvirt_archives: []
+```
+
+#### Example usage
+
+```YAML
+libvirt_archives:
+  - name: kali-2023.1
+    url: https://kali.download/cloud-images/kali-2023.1/kali-linux-2023.1-cloud-genericcloud-amd64.tar.xz
+    creates: /var/lib/libvirt/images/kali-2023.1/disk.raw
+```
 
 ### libvirt_daemon_opts
 
