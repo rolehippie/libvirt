@@ -18,6 +18,15 @@ libvirt_virtlogd_args:
 # @end
 libvirt_images: []
 
+# @var libvirt_archives:description: List of images archives to download and extract
+# @var libvirt_archives:example: >
+# libvirt_archives:
+#   - name: kali-2023.1
+#     url: https://kali.download/cloud-images/kali-2023.1/kali-linux-2023.1-cloud-genericcloud-amd64.tar.xz
+#     creates: /var/lib/libvirt/images/kali-2023.1/disk.raw
+# @end
+libvirt_archives: []
+
 # @var libvirt_networks:description: Definition of available networks
 # @var libvirt_networks:example: >
 # libvirt_networks:

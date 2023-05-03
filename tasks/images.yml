@@ -28,4 +28,50 @@
     - libvirt
     - images
 
+- name: Create archive path
+  loop: "{{ libvirt_archives }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default('present') == 'present'
+  file:
+    path: "/var/lib/libvirt/images/{{ item.name }}"
+    owner: libvirt-qemu
+    group: kvm
+    mode: u=rwx,g=x,o=x
+    state: directory
+  tags:
+    - libvirt
+    - images
+
+- name: Download defined archives
+  loop: "{{ libvirt_archives }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default('present') == 'present'
+  unarchive:
+    src: "{{ item.url }}"
+    dest: "/var/lib/libvirt/images/{{ item.name }}"
+    include: "{{ item.include | default(omit) }}"
+    exclude: "{{ item.exclude | default(omit) }}"
+    remote_src: True
+    owner: libvirt-qemu
+    group: kvm
+    mode: u=rw,g=rw,o=
+    creates: "{{ item.creates | default(omit) }}"
+  tags:
+    - libvirt
+    - images
+
+- name: Remove defined archives
+  loop: "{{ libvirt_archives }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.state | default('present') == 'absent'
+  file:
+    path: "/var/lib/libvirt/images/{{ item.name }}"
+    state: absent
+  tags:
+    - libvirt
+    - images
+
 ...
