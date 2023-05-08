@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/rolehippie/libvirt/compare/v1.1.0...v1.2.0) (2023-05-08)
+
+
+### Features
+
+* add an option to download archives for images ([0981c83](https://github.com/rolehippie/libvirt/commit/0981c83cdb7bb656e63f09e0a8b7c07aba1031d7))
+
 ## [1.1.0](https://github.com/rolehippie/libvirt/compare/v1.0.0...v1.1.0) (2023-04-08)
 
 
