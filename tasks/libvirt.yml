@@ -17,6 +17,16 @@
   tags:
     - libvirt
 
+- name: Install virt manager
+  loop:
+    - virt-manager
+  when: libvirt_manager_install
+  package:
+    name: "{{ item }}"
+    state: present
+  tags:
+    - libvirt
+
 - name: Write libvirtd default
   notify:
     - Restart libvirtd

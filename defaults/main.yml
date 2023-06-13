@@ -3,6 +3,9 @@
 # @var libvirt_daemon_opts:description: Arguments for the libvirtd
 libvirt_daemon_opts:
 
+# @var libvirt_manager_install:description: Install virt manager package
+libvirt_manager_install: False
+
 # @var libvirt_virtlockd_args:description: Arguments for the virtlockd
 libvirt_virtlockd_args:
 

@@ -21,6 +21,7 @@ Building and improving this Ansible role have been sponsored by my current and p
   - [libvirt_daemon_opts](#libvirt_daemon_opts)
   - [libvirt_images](#libvirt_images)
   - [libvirt_machines](#libvirt_machines)
+  - [libvirt_manager_install](#libvirt_manager_install)
   - [libvirt_networks](#libvirt_networks)
   - [libvirt_virtlockd_args](#libvirt_virtlockd_args)
   - [libvirt_virtlogd_args](#libvirt_virtlogd_args)
@@ -127,6 +128,16 @@ libvirt_machines:
         source: /var/lib/libvirt/images/ubuntu-18.04.qcow2
     boot:
       - hd
+```
+
+### libvirt_manager_install
+
+Install virt manager package
+
+#### Default value
+
+```YAML
+libvirt_manager_install: false
 ```
 
 ### libvirt_networks
