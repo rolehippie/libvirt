@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/rolehippie/libvirt/compare/v1.2.0...v1.3.0) (2023-06-13)
+
+
+### Features
+
+* add option to install virt-manager ([fd4b736](https://github.com/rolehippie/libvirt/commit/fd4b736aab8af0248f2516eb85f3dfb9252bf8b0))
+
 ## [1.2.0](https://github.com/rolehippie/libvirt/compare/v1.1.0...v1.2.0) (2023-05-08)
 
 
