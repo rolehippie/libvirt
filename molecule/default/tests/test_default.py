@@ -7,5 +7,5 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_is_installed(host):
-    pkg = host.package("qemu-kvm")
+    pkg = host.package("qemu-system-x86")
     assert pkg.is_installed
