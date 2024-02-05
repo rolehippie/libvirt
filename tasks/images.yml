@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 - name: Download defined images
   loop: "{{ libvirt_images }}"

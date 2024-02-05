@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 - name: Include libvirt tasks
   include_tasks: libvirt.yml
