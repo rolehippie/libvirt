@@ -201,7 +201,8 @@ libvirt_virtlogd_args:
 
 ## Dependencies
 
-- None
+- [community.general](https://github.com/ansible-collections/community.general)
+- [community.libvirt](https://github.com/ansible-collections/community.libvirt)
 
 ## License
 
