@@ -1,24 +1,23 @@
-# Standards: 1.2
 ---
 - name: Include libvirt tasks
-  include_tasks: libvirt.yml
+  ansible.builtin.include_tasks: libvirt.yml
   tags:
     - libvirt
 
 - name: Include images tasks
-  include_tasks: images.yml
+  ansible.builtin.include_tasks: images.yml
   tags:
     - libvirt
     - images
 
 - name: Include networks tasks
-  include_tasks: networks.yml
+  ansible.builtin.include_tasks: networks.yml
   tags:
     - libvirt
     - networks
 
 - name: Include machines tasks
-  include_tasks: machines.yml
+  ansible.builtin.include_tasks: machines.yml
   tags:
     - libvirt
     - machines

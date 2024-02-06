@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 - name: Check userdata exists
   loop: "{{ libvirt_machines }}"
@@ -6,7 +5,7 @@
     label: "{{ item.name }}"
   when: item.userdata and item.state | default('running') != 'destroyed'
   register: libvirt_machines_userdata
-  stat:
+  ansible.builtin.stat:
     path: "/var/lib/libvirt/userdata/{{ item.name }}.iso"
   tags:
     - libvirt
@@ -17,7 +16,7 @@
   loop_control:
     label: "{{ item.item.name }}"
   when: not item.skipped | default(False) and item.item.userdata and (not item.stat.exists or item.item.overwrite | default(False))
-  include_tasks: userdata.yml
+  ansible.builtin.include_tasks: userdata.yml
   tags:
     - libvirt
     - machines
@@ -28,7 +27,7 @@
     label: "{{ item.0.name }}: {{ item.1.name }}"
   when: item.1.type == "lvm" and item.0.state | default('running') != 'destroyed'
   register: libvirt_machines_volume
-  lvol:
+  community.general.lvol:
     vg: "{{ item.1.group }}"
     lv: "{{ item.1.name }}"
     size: "{{ item.1.size }}"
@@ -43,7 +42,7 @@
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
   when: item.changed and item.item.1.source is defined
   register: libvirt_machines_rawfile
-  command: |
+  ansible.builtin.command: |
     qemu-img convert -O raw {{ item.item.1.source }} {{ item.item.1.source }}-{{ item.item.1.name }}.raw
   args:
     creates: "{{ item.item.1.source }}-{{ item.item.1.name }}.raw"
@@ -57,7 +56,7 @@
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
   when: item.changed and item.item.item.1.source is defined
-  command: |
+  ansible.builtin.command: |
     dd if={{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw of=/dev/{{ item.item.item.1.group }}/{{ item.item.item.1.name }} bs=4M
   tags:
     - libvirt
@@ -69,7 +68,7 @@
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
   when: item.item.item.1.source is defined
-  file:
+  ansible.builtin.file:
     path: "{{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw"
     state: absent
   tags:
@@ -83,7 +82,7 @@
   when: item.1.type == "qcow2" and item.state | default('running') != 'destroyed'
   register: libvirt_machines_image
   check_mode: True
-  stat:
+  ansible.builtin.stat:
     path: "/var/lib/libvirt/images/{{ item.1.name }}.qcow2"
   tags:
     - libvirt
@@ -95,13 +94,13 @@
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
   when: item.item.1.source is defined and item.stat is defined and not item.stat.exists
   register: libvirt_machines_create
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.item.1.source }}"
     dest: "/var/lib/libvirt/images/{{ item.item.1.name }}.qcow2"
     remote_src: True
     owner: libvirt-qemu
     group: kvm
-    mode: 0660
+    mode: u=rw,g=rw,o=
   tags:
     - libvirt
     - machines
@@ -111,7 +110,7 @@
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
   when: item.changed
-  command: |
+  ansible.builtin.command: |
     qemu-img resize /var/lib/libvirt/images/{{ item.item.item.1.name }}.qcow2 {{ item.item.item.1.size | upper }}
   tags:
     - libvirt
@@ -193,7 +192,7 @@
     label: "{{ item.0.name }}: {{ item.1.name }}"
   when: item.1.type == "lvm" and item.0.state | default('running') == 'destroyed'
   register: libvirt_machines_volume
-  lvol:
+  community.general.lvol:
     vg: "{{ item.1.group }}"
     lv: "{{ item.1.name }}"
     force: True

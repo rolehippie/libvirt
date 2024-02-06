@@ -1,4 +1,3 @@
-# Standards: 1.2
 ---
 - name: Define network spec
   loop: "{{ libvirt_networks }}"
