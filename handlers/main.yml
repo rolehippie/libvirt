@@ -1,24 +1,24 @@
 ---
 - name: Restart libvirtd
-  systemd:
+  ansible.builtin.systemd:
     name: libvirtd
     state: restarted
     daemon_reload: True
 
 - name: Restart virtlogd
-  systemd:
+  ansible.builtin.systemd:
     name: virtlogd
     state: restarted
     daemon_reload: True
 
 - name: Restart virtlockd
-  systemd:
+  ansible.builtin.systemd:
     name: virtlockd
     state: restarted
     daemon_reload: True
 
 - name: Restart guests
-  systemd:
+  ansible.builtin.systemd:
     name: libvirt-guests
     state: restarted
     daemon_reload: True

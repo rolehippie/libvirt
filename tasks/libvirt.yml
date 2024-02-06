@@ -10,7 +10,7 @@
     - genisoimage
     - cloud-image-utils
     - libguestfs-tools
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   tags:
@@ -20,7 +20,7 @@
   loop:
     - virt-manager
   when: libvirt_manager_install
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   tags:
@@ -29,7 +29,7 @@
 - name: Write libvirtd default
   notify:
     - Restart libvirtd
-  template:
+  ansible.builtin.template:
     src: libvirt/libvirtd.j2
     dest: /etc/default/libvirtd
     owner: root
@@ -41,7 +41,7 @@
 - name: Write virtlogd default
   notify:
     - Restart virtlogd
-  template:
+  ansible.builtin.template:
     src: libvirt/virtlogd.j2
     dest: /etc/default/virtlogd
     owner: root
@@ -53,7 +53,7 @@
 - name: Write virtlockd default
   notify:
     - Restart virtlockd
-  template:
+  ansible.builtin.template:
     src: libvirt/virtlockd.j2
     dest: /etc/default/virtlockd
     owner: root
@@ -65,7 +65,7 @@
 - name: Write guests default
   notify:
     - Restart guests
-  template:
+  ansible.builtin.template:
     src: libvirt/guests.j2
     dest: /etc/default/libvirt-guests
     owner: root
@@ -75,7 +75,7 @@
     - libvirt
 
 - name: Start libvirtd service
-  systemd:
+  ansible.builtin.systemd:
     name: libvirtd
     state: started
     daemon_reload: True
@@ -85,7 +85,7 @@
     - libvirt
 
 - name: Start virtlogd service
-  systemd:
+  ansible.builtin.systemd:
     name: virtlogd
     state: started
     daemon_reload: True
@@ -95,7 +95,7 @@
     - libvirt
 
 - name: Start virtlockd service
-  systemd:
+  ansible.builtin.systemd:
     name: virtlockd
     state: started
     daemon_reload: True
@@ -105,7 +105,7 @@
     - libvirt
 
 - name: Start guests service
-  systemd:
+  ansible.builtin.systemd:
     name: libvirt-guests
     state: started
     daemon_reload: True

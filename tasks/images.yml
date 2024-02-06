@@ -4,7 +4,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.state | default('present') == 'present'
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "/var/lib/libvirt/images/{{ item.name }}"
     checksum: "{{ item.checksum | default(omit) }}"
@@ -20,7 +20,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.state | default('present') == 'absent'
-  file:
+  ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     state: absent
   tags:
@@ -32,7 +32,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.state | default('present') == 'present'
-  file:
+  ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     owner: libvirt-qemu
     group: kvm
@@ -47,7 +47,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.state | default('present') == 'present'
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ item.url }}"
     dest: "/var/lib/libvirt/images/{{ item.name }}"
     include: "{{ item.include | default(omit) }}"
@@ -66,7 +66,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.state | default('present') == 'absent'
-  file:
+  ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     state: absent
   tags:
