@@ -6,7 +6,7 @@
   when: item.state | default('active') != 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
-    ansible.builtin.command: define
+    command: define
     xml: "{{ lookup('template', 'networks/spec.j2') }}"
   tags:
     - libvirt
@@ -19,7 +19,7 @@
   when: item.0.state | default('active') != 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.0.name }}"
-    ansible.builtin.command: modify
+    command: modify
     xml: "<host mac=\"{{ item.1.mac }}\" name=\"{{ item.1.name }}\" ip=\"{{ item.1.ip }}\"/>"
   tags:
     - libvirt
@@ -32,7 +32,7 @@
   when: item.state | default('active') == 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
-    ansible.builtin.command: destroy
+    command: destroy
   tags:
     - libvirt
     - networks
@@ -44,7 +44,7 @@
   when: item.state | default('active') == 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
-    ansible.builtin.command: destroy
+    command: destroy
   tags:
     - libvirt
     - networks

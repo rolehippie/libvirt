@@ -120,7 +120,7 @@
 - name: List running machines
   register: libvirt_running_machines
   community.libvirt.virt:
-    ansible.builtin.command: list_vms
+    command: list_vms
     state: running
   tags:
     - libvirt
@@ -132,7 +132,7 @@
     label: "{{ item.name }}"
   when: item.state | default('running') != 'destroyed' and item.name not in libvirt_running_machines.list_vms
   community.libvirt.virt:
-    ansible.builtin.command: define
+    command: define
     xml: "{{ lookup('template', 'machines/spec.j2') }}"
   tags:
     - libvirt
@@ -145,7 +145,7 @@
   when: item.state | default('running') == 'destroyed' and item.name in libvirt_running_machines.list_vms
   community.libvirt.virt:
     name: "{{ item.name }}"
-    ansible.builtin.command: destroy
+    command: destroy
   tags:
     - libvirt
     - machines
@@ -157,7 +157,7 @@
   when: item.state | default('running') == 'destroyed'
   community.libvirt.virt:
     name: "{{ item.name }}"
-    ansible.builtin.command: undefine
+    command: undefine
   tags:
     - libvirt
     - machines
