@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.0](https://github.com/rolehippie/libvirt/compare/v1.3.0...v2.0.0) (2024-02-12)
+
+
+### Features
+
+* drop support for ubuntu 18.04 ([2817c18](https://github.com/rolehippie/libvirt/commit/2817c18b5380059518e140829f60504a72488619))
+* used full qualified collection names ([7fa2542](https://github.com/rolehippie/libvirt/commit/7fa2542911d32668010918955d61ac2d9a15e15b))
+
+
+### Bugfixes
+
+* remove meta requirements and document used collections ([b0cbca9](https://github.com/rolehippie/libvirt/commit/b0cbca921f2ebded563ca335e6686ff560a5ad21))
+* use right attributes for libvirt resources ([c55a4e0](https://github.com/rolehippie/libvirt/commit/c55a4e0678181c69d78779c915e0165dadde88c9))
+
 ## [1.3.0](https://github.com/rolehippie/libvirt/compare/v1.2.0...v1.3.0) (2023-06-13)
 
 
