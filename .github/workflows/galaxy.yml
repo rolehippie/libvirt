@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 name: galaxy
 
 "on":
@@ -8,6 +9,9 @@ name: galaxy
       - master
     tags:
       - v*
+
+permissions:
+  contents: read
 
 jobs:
   galaxy:
