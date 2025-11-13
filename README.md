@@ -1,4 +1,4 @@
-# workspace
+# libvirt
 
 [![Source Code](https://img.shields.io/badge/github-source%20code-blue?logo=github&logoColor=white)](https://github.com/rolehippie/libvirt)
 [![General Workflow](https://github.com/rolehippie/libvirt/actions/workflows/general.yml/badge.svg)](https://github.com/rolehippie/libvirt/actions/workflows/general.yml)
@@ -105,8 +105,8 @@ libvirt_machines:
     memory: 4096
     cpus: 4
     vnc: 5901
-    userdata: True
-    overwrite: False
+    userdata: true
+    overwrite: false
     password: p455w0rd
     sshkeys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwHEKPdszS27LCQCao4UhuP0TvFlccP6nRWKm00fquA user1@example
@@ -117,7 +117,7 @@ libvirt_machines:
         source: general
         mac: 18:03:73:40:90:4c
         device: ens3
-        dhcp: True
+        dhcp: true
     disks:
       - name: foobar-root
         type: lvm
@@ -160,7 +160,7 @@ libvirt_networks:
     bridge: virbr2
     uuid: 9315F6EA-AEA2-43B0-A5C7-C69FBCF4899E
     mac: C5-9E-B7-34-F7-7B
-    autostart: False
+    autostart: false
     state: active
   - name: virbr3
     state: absent

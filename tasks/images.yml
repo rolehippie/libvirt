@@ -3,7 +3,8 @@
   loop: "{{ libvirt_images }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('present') == 'present'
+  when:
+    - true if item.state is undefined else item.state == 'present'
   ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "/var/lib/libvirt/images/{{ item.name }}"
@@ -19,7 +20,8 @@
   loop: "{{ libvirt_images }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('present') == 'absent'
+  when:
+    - false if item.state is undefined else item.state == 'absent'
   ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     state: absent
@@ -31,7 +33,8 @@
   loop: "{{ libvirt_archives }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('present') == 'present'
+  when:
+    - true if item.state is undefined else item.state == 'present'
   ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     owner: libvirt-qemu
@@ -46,17 +49,18 @@
   loop: "{{ libvirt_archives }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('present') == 'present'
+  when:
+    - true if item.state is undefined else item.state == 'present'
   ansible.builtin.unarchive:
     src: "{{ item.url }}"
     dest: "/var/lib/libvirt/images/{{ item.name }}"
-    include: "{{ item.include | default(omit) }}"
-    exclude: "{{ item.exclude | default(omit) }}"
-    remote_src: True
+    include: "{{ omit if item.include is undefined else item.include }}"
+    exclude: "{{ omit if item.exclude is undefined else item.exclude }}"
+    remote_src: true
     owner: libvirt-qemu
     group: kvm
     mode: u=rw,g=rw,o=
-    creates: "{{ item.creates | default(omit) }}"
+    creates: "{{ omit if item.creates is undefined else item.creates }}"
   tags:
     - libvirt
     - images
@@ -65,7 +69,8 @@
   loop: "{{ libvirt_archives }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('present') == 'absent'
+  when:
+    - false if item.state is undefined else item.state == 'absent'
   ansible.builtin.file:
     path: "/var/lib/libvirt/images/{{ item.name }}"
     state: absent

@@ -1,6 +1,7 @@
 ---
 - name: Delete userdata iso
-  when: item.stat.exists
+  when:
+    - item.stat.exists
   ansible.builtin.file:
     path: "/var/lib/libvirt/userdata/{{ item.item.name }}.iso"
     state: absent

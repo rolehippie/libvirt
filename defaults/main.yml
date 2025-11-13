@@ -3,7 +3,7 @@
 libvirt_daemon_opts:
 
 # @var libvirt_manager_install:description: Install virt manager package
-libvirt_manager_install: False
+libvirt_manager_install: false
 
 # @var libvirt_virtlockd_args:description: Arguments for the virtlockd
 libvirt_virtlockd_args:
@@ -39,7 +39,7 @@ libvirt_archives: []
 #     bridge: virbr2
 #     uuid: 9315F6EA-AEA2-43B0-A5C7-C69FBCF4899E
 #     mac: C5-9E-B7-34-F7-7B
-#     autostart: False
+#     autostart: false
 #     state: active
 #   - name: virbr3
 #     state: absent
@@ -54,8 +54,8 @@ libvirt_networks: []
 #     memory: 4096
 #     cpus: 4
 #     vnc: 5901
-#     userdata: True
-#     overwrite: False
+#     userdata: true
+#     overwrite: false
 #     password: p455w0rd
 #     sshkeys:
 #       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwHEKPdszS27LCQCao4UhuP0TvFlccP6nRWKm00fquA user1@example
@@ -66,7 +66,7 @@ libvirt_networks: []
 #         source: general
 #         mac: 18:03:73:40:90:4c
 #         device: ens3
-#         dhcp: True
+#         dhcp: true
 #     disks:
 #       - name: foobar-root
 #         type: lvm

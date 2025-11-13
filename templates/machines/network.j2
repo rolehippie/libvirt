@@ -1,7 +1,7 @@
 version: 2
 renderer: networkd
 
-{% if item.item.netplan | default(False) %}
+{% if item.item.netplan is defined %}
 {{ item.item.netplan | to_nice_yaml(indent=2) | trim }}
 {% else %}
 ethernets:

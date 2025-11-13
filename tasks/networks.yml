@@ -3,7 +3,8 @@
   loop: "{{ libvirt_networks }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('active') != 'destroyed'
+  when:
+    - false if item.state is undefined else item.state != 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
     command: define
@@ -13,10 +14,11 @@
     - networks
 
 - name: Modify network hosts
-  loop: "{{ libvirt_networks | subelements('hosts', skip_missing=True) }}"
+  loop: "{{ libvirt_networks | subelements('hosts', skip_missing=true) }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.0.state | default('active') != 'destroyed'
+  when:
+    - false if item.0.state is undefined else item.0.state != 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.0.name }}"
     command: modify
@@ -29,7 +31,8 @@
   loop: "{{ libvirt_networks }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('active') == 'destroyed'
+  when:
+    - false if item.state is undefined else item.state == 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
     command: destroy
@@ -41,7 +44,8 @@
   loop: "{{ libvirt_networks }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('active') == 'destroyed'
+  when:
+    - false if item.state is undefined else item.state == 'destroyed'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
     command: destroy
@@ -53,10 +57,11 @@
   loop: "{{ libvirt_networks }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('active') == 'active'
+  when:
+    - false if item.state is undefined else item.state == 'active'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
-    autostart: "{{ item.autostart | default(True) }}"
+    autostart: "{{ false if item.autostart is undefined else item.autostart }}"
   tags:
     - libvirt
     - networks
@@ -65,10 +70,11 @@
   loop: "{{ libvirt_networks }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('active') == 'active'
+  when:
+    - false if item.state is undefined else item.state == 'active'
   community.libvirt.virt_net:
     name: "{{ item.name }}"
-    state: "{{ item.state | default('active') }}"
+    state: "{{ item.state }}"
   tags:
     - libvirt
     - networks

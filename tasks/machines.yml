@@ -3,7 +3,9 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.userdata and item.state | default('running') != 'destroyed'
+  when:
+    - item.userdata is defined
+    - true if item.state is undefined else item.state != 'destroyed'
   register: libvirt_machines_userdata
   ansible.builtin.stat:
     path: "/var/lib/libvirt/userdata/{{ item.name }}.iso"
@@ -15,7 +17,10 @@
   loop: "{{ libvirt_machines_userdata.results | default([]) }}"
   loop_control:
     label: "{{ item.item.name }}"
-  when: not item.skipped | default(False) and item.item.userdata and (not item.stat.exists or item.item.overwrite | default(False))
+  when:
+    - not item.skipped
+    - item.item.userdata
+    - not item.stat.exists or item.item.overwrite
   ansible.builtin.include_tasks: userdata.yml
   tags:
     - libvirt
@@ -25,13 +30,15 @@
   loop: "{{ libvirt_machines | subelements('disks') }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.1.type == "lvm" and item.0.state | default('running') != 'destroyed'
+  when:
+    - item.1.type == "lvm"
+    - true if item.0.state is undefined else item.0.state != 'destroyed'
   register: libvirt_machines_volume
   community.general.lvol:
     vg: "{{ item.1.group }}"
     lv: "{{ item.1.name }}"
     size: "{{ item.1.size }}"
-    resizefs: True
+    resizefs: true
   tags:
     - libvirt
     - machines
@@ -40,7 +47,9 @@
   loop: "{{ libvirt_machines_volume.results | default([]) }}"
   loop_control:
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
-  when: item.changed and item.item.1.source is defined
+  when:
+    - item.changed
+    - item.item.1.source is defined
   register: libvirt_machines_rawfile
   ansible.builtin.command: |
     qemu-img convert -O raw {{ item.item.1.source }} {{ item.item.1.source }}-{{ item.item.1.name }}.raw
@@ -55,7 +64,9 @@
   loop: "{{ libvirt_machines_rawfile.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
-  when: item.changed and item.item.item.1.source is defined
+  when:
+    - item.changed
+    - item.item.item.1.source is defined
   ansible.builtin.command: |
     dd if={{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw of=/dev/{{ item.item.item.1.group }}/{{ item.item.item.1.name }} bs=4M
   tags:
@@ -67,7 +78,8 @@
   loop: "{{ libvirt_machines_rawfile.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
-  when: item.item.item.1.source is defined
+  when:
+    - item.item.item.1.source is defined
   ansible.builtin.file:
     path: "{{ item.item.item.1.source }}-{{ item.item.item.1.name }}.raw"
     state: absent
@@ -79,9 +91,11 @@
   loop: "{{ libvirt_machines | subelements('disks') }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.1.type == "qcow2" and item.state | default('running') != 'destroyed'
+  when:
+    - item.1.type == "qcow2"
+    - true if item.state is undefined else item.state != 'destroyed'
   register: libvirt_machines_image
-  check_mode: True
+  check_mode: true
   ansible.builtin.stat:
     path: "/var/lib/libvirt/images/{{ item.1.name }}.qcow2"
   tags:
@@ -92,12 +106,15 @@
   loop: "{{ libvirt_machines_image.results }}"
   loop_control:
     label: "{{ item.item.0.name }}: {{ item.item.1.name }}"
-  when: item.item.1.source is defined and item.stat is defined and not item.stat.exists
+  when:
+    - item.item.1.source is defined
+    - item.stat is defined
+    - not item.stat.exists
   register: libvirt_machines_create
   ansible.builtin.copy:
     src: "{{ item.item.1.source }}"
     dest: "/var/lib/libvirt/images/{{ item.item.1.name }}.qcow2"
-    remote_src: True
+    remote_src: true
     owner: libvirt-qemu
     group: kvm
     mode: u=rw,g=rw,o=
@@ -109,7 +126,8 @@
   loop: "{{ libvirt_machines_create.results | default([]) }}"
   loop_control:
     label: "{{ item.item.item.0.name }}: {{ item.item.item.1.name }}"
-  when: item.changed
+  when:
+    - item.changed
   ansible.builtin.command: |
     qemu-img resize /var/lib/libvirt/images/{{ item.item.item.1.name }}.qcow2 {{ item.item.item.1.size | upper }}
   tags:
@@ -130,7 +148,9 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') != 'destroyed' and item.name not in libvirt_running_machines.list_vms
+  when:
+    - true if item.state is undefined else item.state != 'destroyed'
+    - item.name not in libvirt_running_machines.list_vms
   community.libvirt.virt:
     command: define
     xml: "{{ lookup('template', 'machines/spec.j2') }}"
@@ -142,7 +162,9 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') == 'destroyed' and item.name in libvirt_running_machines.list_vms
+  when:
+    - false if item.state is undefined else item.state == 'destroyed'
+    - item.name in libvirt_running_machines.list_vms
   community.libvirt.virt:
     name: "{{ item.name }}"
     command: destroy
@@ -154,7 +176,8 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') == 'destroyed'
+  when:
+    - false if item.state is undefined else item.state == 'destroyed'
   community.libvirt.virt:
     name: "{{ item.name }}"
     command: undefine
@@ -166,10 +189,11 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') == 'running'
+  when:
+    - false if item.state is undefined else item.state == 'running'
   community.libvirt.virt:
     name: "{{ item.name }}"
-    autostart: "{{ item.autostart | default(True) }}"
+    autostart: "{{ item.autostart | default(true) }}"
   tags:
     - libvirt
     - machines
@@ -178,10 +202,11 @@
   loop: "{{ libvirt_machines }}"
   loop_control:
     label: "{{ item.name }}"
-  when: item.state | default('running') == 'running'
+  when:
+    - false if item.state is undefined else item.state == 'running'
   community.libvirt.virt:
     name: "{{ item.name }}"
-    state: "{{ item.state | default('running') }}"
+    state: "{{ item.state }}"
   tags:
     - libvirt
     - machines
@@ -190,12 +215,14 @@
   loop: "{{ libvirt_machines | subelements('disks') }}"
   loop_control:
     label: "{{ item.0.name }}: {{ item.1.name }}"
-  when: item.1.type == "lvm" and item.0.state | default('running') == 'destroyed'
+  when:
+    - item.1.type == "lvm"
+    - false if item.0.state is undefined else item.0.state == 'destroyed'
   register: libvirt_machines_volume
   community.general.lvol:
     vg: "{{ item.1.group }}"
     lv: "{{ item.1.name }}"
-    force: True
+    force: true
     state: absent
   tags:
     - libvirt

@@ -1,18 +1,18 @@
 <network>
   <name>{{ item.name }}</name>
-{% if item.uuid | default(False) %}
+{% if item.uuid | default(false) %}
   <uuid>{{ item.uuid }}</uuid>
 {% endif %}
-{% if item.mac | default(False) %}
+{% if item.mac | default(false) %}
   <mac address="{{ item.mac }}"/>
 {% endif %}
 
   <bridge name="{{ item.bridge }}" />
   <forward mode="{{ item.mode | default("bridge") }}" />
-{% if item.address | default(False) and item.netmask | default(False) %}
+{% if item.address | default(false) and item.netmask | default(false) %}
 
   <ip address="{{ item.address }}" netmask="{{ item.netmask }}">
-{% if item.dhcp.enabled | default(False) %}
+{% if item.dhcp.enabled | default(false) %}
     <dhcp>
       <range start="{{ item.dhcp.start }}" end="{{ item.dhcp.end }}"/>
 {% for host in item.hosts | default([]) %}

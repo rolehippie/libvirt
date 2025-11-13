@@ -1,6 +1,6 @@
 <domain type="kvm">
   <name>{{ item.name }}</name>
-  {% if item.uuid | default(False) %}
+  {% if item.uuid | default(false) %}
     <uuid>{{ item.uuid }}</uuid>
   {% endif %}
 
@@ -54,7 +54,7 @@
         </disk>
       {% endif %}
     {% endfor %}
-    {% if item.userdata | default(True) %}
+    {% if item.userdata | default(true) %}
       <disk type="file" device="cdrom">
         <driver name="qemu" type="raw" cache="none"/>
         <source file="/var/lib/libvirt/userdata/{{ item.name }}.iso"/>
@@ -67,8 +67,8 @@
     {% for interface in item.interfaces | default([]) %}
       <interface type="{{ interface.type }}">
         <model type="virtio"/>
-        {% if interface.mac | default(False) %}<mac address="{{ interface.mac }}"/>{% endif %}
-        {% if interface.target | default(False) %}<target dev="{{ interface.target }}"/>{% endif %}
+        {% if interface.mac | default(false) %}<mac address="{{ interface.mac }}"/>{% endif %}
+        {% if interface.target | default(false) %}<target dev="{{ interface.target }}"/>{% endif %}
         <source {{ interface.type }}="{{ interface.source }}"/>
       </interface>
     {% endfor %}
