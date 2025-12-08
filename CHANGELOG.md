@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0](https://github.com/rolehippie/libvirt/compare/v2.0.0...v3.0.0) (2025-12-08)
+
+
+### Features
+
+* apply new repo structure and update linting ([383b7ff](https://github.com/rolehippie/libvirt/commit/383b7ff4ac887b3da82218ff9fc63d2d97e7c5db))
+* **major:** update dependency community.general to v12 ([ab10460](https://github.com/rolehippie/libvirt/commit/ab104607c4d249827d69a83ca70fbe97911d4614))
+
 ## [2.0.0](https://github.com/rolehippie/libvirt/compare/v1.3.0...v2.0.0) (2024-02-12)
 
 
