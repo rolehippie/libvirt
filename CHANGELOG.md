@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.0](https://github.com/rolehippie/libvirt/compare/v3.0.0...v3.1.0) (2026-01-05)
+
+
+### Features
+
+* **minor:** update dependency community.general to >=12.1.0,<12.2.0 ([47b290a](https://github.com/rolehippie/libvirt/commit/47b290a2113209e98fd732858e1b6d6b1e927fa8))
+* **minor:** update dependency community.general to >=12.2.0,<12.3.0 ([2351e87](https://github.com/rolehippie/libvirt/commit/2351e87874ff30e44d59030289327b967dc63e3d))
+
 ## [3.0.0](https://github.com/rolehippie/libvirt/compare/v2.0.0...v3.0.0) (2025-12-08)
 
 
