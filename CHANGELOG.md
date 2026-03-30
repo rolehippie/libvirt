@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.3.0](https://github.com/rolehippie/libvirt/compare/v3.2.0...v3.3.0) (2026-03-30)
+
+### Dependencies
+
+* **minor:** update dependency community.general to >=12.4.0,<12.5.0 ([025cceb](https://github.com/rolehippie/libvirt/commit/025cceb1ceaecda4cc5c959d619350d850b92d6c))
+* **minor:** update dependency community.general to >=12.5.0,<12.6.0 ([cf71bae](https://github.com/rolehippie/libvirt/commit/cf71baeb14cdfbd3993fc44a98a6db841be4171a))
+
+### Miscellaneous
+
+* **flake:** updated lockfile [skip ci] ([4e92253](https://github.com/rolehippie/libvirt/commit/4e9225348c46ae9b70d67de6436d03e43061ce41))
+* **flake:** updated lockfile [skip ci] ([7d9023a](https://github.com/rolehippie/libvirt/commit/7d9023a40246ead940df11931626c0dd21ba8208))
+* **flake:** updated lockfile [skip ci] ([800f399](https://github.com/rolehippie/libvirt/commit/800f399e1362131bf70d74435371e6125b09f82a))
+* **flake:** updated lockfile [skip ci] ([1a0de0f](https://github.com/rolehippie/libvirt/commit/1a0de0ff075601df75e2d366ed2bea19b1fc8d7c))
+* **flake:** updated lockfile [skip ci] ([8b77978](https://github.com/rolehippie/libvirt/commit/8b77978df1947865aade1f5e27c6520cf99710a1))
+* **flake:** updated lockfile [skip ci] ([9c21f19](https://github.com/rolehippie/libvirt/commit/9c21f1968bcc09a84391d4a559bc4b9a39aaf0ce))
+* **flake:** updated lockfile [skip ci] ([3f02e22](https://github.com/rolehippie/libvirt/commit/3f02e22fa4e97d371b118f7ba972a3578ada3fe0))
+* **flake:** updated lockfile [skip ci] ([8c749e0](https://github.com/rolehippie/libvirt/commit/8c749e066c0c06ea4969a46d2410bc42b8f566a2))
+
 ## [3.2.0](https://github.com/rolehippie/libvirt/compare/v3.1.0...v3.2.0) (2026-02-02)
 
 ### Dependencies
