@@ -1,5 +1,7 @@
 # Changelog
 
+## [4.1.0](https://github.com/rolehippie/libvirt/compare/v4.0.0...v4.1.0) (2026-07-27)
+
 ## [4.0.0](https://github.com/rolehippie/libvirt/compare/v3.4.0...v4.0.0) (2026-05-25)
 
 ### Dependencies
