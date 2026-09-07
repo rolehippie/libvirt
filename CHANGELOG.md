@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.0](https://github.com/rolehippie/libvirt/compare/v4.1.0...v4.2.0) (2026-09-07)
+
+### Features
+
+* add separate requirements for molecule run ([ef229e0](https://github.com/rolehippie/libvirt/commit/ef229e018c06456b37ca244e9b0fc8fe7d7bafe3))
+
 ## [4.1.0](https://github.com/rolehippie/libvirt/compare/v4.0.0...v4.1.0) (2026-07-27)
 
 ## [4.0.0](https://github.com/rolehippie/libvirt/compare/v3.4.0...v4.0.0) (2026-05-25)
